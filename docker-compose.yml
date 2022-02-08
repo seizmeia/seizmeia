@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+    seizmeia:
+        container_name: seizmeia
+        command: --reload
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: server
+        volumes:
+            - ./server/:/usr/src/app/server
+        ports:
+        - "8000:8000"
