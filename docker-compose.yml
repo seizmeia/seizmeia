@@ -7,8 +7,8 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-            target: server
+            target: production
         volumes:
-            - ./server/:/usr/src/app/server
+            - ./seizmeia/:/usr/src/app/seizmeia
         ports:
         - "8000:8000"

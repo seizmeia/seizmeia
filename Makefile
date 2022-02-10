@@ -1,5 +1,9 @@
-all:
-	@uvicorn server:app --reload
+all: run.uvicorn
+
+run:
+	python seizmeia/__main__.py
+run.uvicorn:
+	@uvicorn seizmeia.server:app --reload
 
 bup: ## Start development environment services
 	@docker compose up --build --detach
@@ -12,18 +16,18 @@ logs:
 	@docker compose logs -f seizmeia
 
 format: ## Formats code
-	@black server --line-length 79
+	@black seizmeia --line-length 79
 
 test: typecheck unittest ## Tests code for typecheck and unit tests
 
 typecheck: ## Type checks source code
-	@mypy server
+	@mypy seizmeia
 
 unittest: ## Runs unit tests
 	@pytest
 
 coverage: ## Gets code test coverage
-	@coverage run -m --source=server pytest tests 1> /dev/null
+	@coverage run -m --source=seizmeia pytest tests 1> /dev/null
 	@coverage report
 
 clear: clean ## Clears the repository
