@@ -1,4 +1,4 @@
-from server import __version__
+from seizmeia.server.version import __version__
 
 
 def test_version():
