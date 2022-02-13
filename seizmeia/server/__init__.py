@@ -1,9 +1,13 @@
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse, Response
+
+from seizmeia.server.health import router as health_router
 from seizmeia.server.version import get_version
 
-from fastapi import FastAPI, Depends
-from fastapi.responses import Response, JSONResponse
-
 app = FastAPI()
+
+# including healthcheck routes (/live and /ready)
+app.include_router(health_router)
 
 
 @app.get("/")

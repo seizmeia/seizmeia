@@ -11,11 +11,12 @@ bup: ## Start development environment services
 down: ## Stop development environment services
 	@docker compose down --remove-orphans
 
-log: logs
+log: logs ## Shows container logs
 logs:
 	@docker compose logs -f seizmeia
 
 format: ## Formats code
+	@isort seizmeia/**/*.py
 	@black seizmeia --line-length 79
 
 test: typecheck unittest ## Tests code for typecheck and unit tests
@@ -29,6 +30,9 @@ unittest: ## Runs unit tests
 coverage: ## Gets code test coverage
 	@coverage run -m --source=seizmeia pytest tests 1> /dev/null
 	@coverage report
+
+ci:
+	@tox
 
 clear: clean ## Clears the repository
 clean:
