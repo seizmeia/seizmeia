@@ -1,8 +1,6 @@
-all: run.uvicorn
+all: run
 
 run:
-	python seizmeia/__main__.py
-run.uvicorn:
 	@uvicorn seizmeia.server:app --reload
 
 bup: ## Start development environment services
@@ -16,8 +14,8 @@ logs:
 	@docker compose logs -f seizmeia
 
 format: ## Formats code
-	@isort seizmeia/**/*.py
-	@black seizmeia --line-length 79
+	@isort seizmeia/**/*.py tests/**/*.py
+	@black seizmeia tests --line-length 79
 
 test: typecheck unittest ## Tests code for typecheck and unit tests
 

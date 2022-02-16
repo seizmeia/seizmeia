@@ -14,13 +14,3 @@ COPY . .
 
 EXPOSE 8000
 ENTRYPOINT [ "uvicorn", "seizmeia.server:app", "--host", "0.0.0.0" ]
-
-
-FROM base AS development
-
-COPY . .
-
-RUN pip install -e .
-
-EXPOSE 8000
-ENTRYPOINT [ "python", "seizmeia/__main__.py" ]

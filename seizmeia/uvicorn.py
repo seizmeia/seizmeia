@@ -4,7 +4,8 @@ import uvicorn  # type: ignore
 def run() -> None:
     uvicorn.run(
         "seizmeia.server:app",
-        http="h11",
+        port=8000,
+        host="0.0.0.0",
         loop="asyncio",
         reload=True,
         workers=1,
