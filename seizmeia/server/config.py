@@ -7,6 +7,7 @@ from seizmeia.server.auth.config import Config as AuthConfig
 
 
 class Config(BaseModel):
+    """Defines the configuration of Seizmeia"""
     auth: AuthConfig
 
 
