@@ -7,14 +7,19 @@ from seizmeia.server.auth.config import Config as AuthConfig
 
 
 class Config(BaseModel):
+    """Defines the configuration of Seizmeia"""
+
     auth: AuthConfig
 
-    def load_from_yaml(self, path: Path):
-        """Loads config from yaml file"""
-        with open(path, "r") as reader:
-            c = safe_load(reader)
-            self = Config(**c)  # this changes object ref (TODO: find solution)
+
+def get_default_config() -> Config:
+    """Return the default server configuration"""
+    return Config(auth=AuthConfig())
 
 
-# Inititalize configs from defaults
-config: Config = Config(auth=AuthConfig())
+def load_config_from_yaml(path: Path) -> Config:
+    """Return configuration from yaml file"""
+    config = get_default_config()
+    with open(path, "r") as reader:
+        config = Config(**safe_load(reader))
+    return config
