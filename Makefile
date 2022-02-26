@@ -23,7 +23,7 @@ typecheck: ## Type checks source code
 	@mypy seizmeia
 
 unittest: ## Runs unit tests
-	@pytest
+	@pytest tests --asyncio-mode=strict
 
 coverage: ## Gets code test coverage
 	@coverage run -m --source=seizmeia pytest tests 1> /dev/null
