@@ -13,3 +13,10 @@ def __get_git_description() -> str:
         .decode("ascii")
         .strip()
     )
+
+
+if __name__ == "__main__":
+    import sys
+
+    sys.stdout.write(get_version())
+    sys.exit(0)
