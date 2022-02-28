@@ -1,3 +1,4 @@
+import asyncio
 from typing import Dict, Protocol
 
 from fastapi import APIRouter, status
@@ -10,7 +11,7 @@ class Healther(Protocol):
     async def ready(self) -> str | None:
         ...
 
-    async def health(self) -> str | None:
+    async def live(self) -> str | None:
         ...
 
 
@@ -20,17 +21,6 @@ class HealthCheckService(Protocol):
     Any service with this interface can be a healthcheck service.
     """
 
-    def add(self, name: str, healther: Healther) -> None:
-        ...
-
-    async def ready(self) -> Dict[str, str]:
-        ...
-
-    async def health(self) -> Dict[str, str]:
-        ...
-
-
-class __BasicHealthCheck:
     healthers: Dict[str, Healther] = {}
 
     def add(self, name: str, healther: Healther) -> None:
@@ -40,28 +30,47 @@ class __BasicHealthCheck:
         self.healthers[name] = healther
 
     async def ready(self) -> Dict[str, str]:
+        ...
+
+    async def live(self) -> Dict[str, str]:
+        ...
+
+
+class ConcurrentHealthCheck(HealthCheckService):
+    """
+    Implements an asyncio healtcheck service.
+    Requesting health status should be as slow as the slowest health provider.
+    """
+
+    async def ready(self) -> Dict[str, str]:
         not_ready: Dict[str, str] = {}
 
-        for name, healther in self.healthers.items():
-            msg = await healther.ready()
-            if msg is not None:
+        status = await asyncio.gather(
+            *[h.ready() for _, h in self.healthers.items()]
+        )
+
+        for name, msg in zip(self.healthers.keys(), status):
+            if msg:
                 not_ready[name] = msg
 
         return not_ready
 
-    async def health(self) -> Dict[str, str]:
-        not_healthy: Dict[str, str] = {}
+    async def live(self) -> Dict[str, str]:
+        not_live: Dict[str, str] = {}
 
-        for name, healther in self.healthers.items():
-            msg = await healther.health()
-            if msg is not None:
-                not_healthy[name] = msg
+        status = await asyncio.gather(
+            *[h.live() for _, h in self.healthers.items()]
+        )
 
-        return not_healthy
+        for name, msg in zip(self.healthers.keys(), status):
+            if msg:
+                not_live[name] = msg
+
+        return not_live
 
 
 router = APIRouter()
-healthcheck: HealthCheckService = __BasicHealthCheck()
+healthcheck: HealthCheckService = ConcurrentHealthCheck()
 
 
 @router.get("/live")
@@ -70,9 +79,9 @@ async def live() -> Response:
     The Kubernetes liveness probe detects that the service is no longer serving
     requests and restarts the offending pod.
     """
-    not_healthy = await healthcheck.ready()
-    if len(not_healthy.keys()) > 0:
-        return JSONResponse(not_healthy, status.HTTP_503_SERVICE_UNAVAILABLE)
+    not_live = await healthcheck.live()
+    if len(not_live.keys()) > 0:
+        return JSONResponse(not_live, status.HTTP_503_SERVICE_UNAVAILABLE)
 
     return JSONResponse(None, status.HTTP_200_OK)
 
