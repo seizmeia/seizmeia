@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from datetime import timedelta
 
 import pytest
 
-from seizmeia.server.health import ConcurrentHealthCheck
-from tests.health import AsyncHealther
+from seizmeia.health import ConcurrentHealthCheck
+from tests.health import AsyncHealtherMock
 
 
 @pytest.mark.asyncio
@@ -14,17 +16,17 @@ async def test_concurrent_health_check():
     Time constrains are not tested due to weak reproducibility of results.
     """
 
-    checker1 = AsyncHealther(
+    checker1 = AsyncHealtherMock(
         sleep_time=timedelta(seconds=0.01),
         live_status="not alive",
         ready_status="not ready. waiting for something",
     )
 
-    checker2 = AsyncHealther(
+    checker2 = AsyncHealtherMock(
         sleep_time=timedelta(seconds=0.01), live_status=None, ready_status=None
     )
 
-    checker3 = AsyncHealther(
+    checker3 = AsyncHealtherMock(
         sleep_time=timedelta(seconds=0.02), live_status=None, ready_status=None
     )
 

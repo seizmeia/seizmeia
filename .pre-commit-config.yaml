@@ -1,0 +1,88 @@
+repos:
+  # runs some verification hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-json
+        exclude: (.vscode|.devcontainer)
+
+      - id: no-commit-to-branch
+        args:
+          - --branch=dev
+          - --branch=master
+
+      - id: trailing-whitespace
+        files: ^(seizmeia|tests)/.+\.py$
+
+      - id: end-of-file-fixer
+        files: ^(seizmeia|tests)/.+\.py$
+
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: debug-statements
+        files: ^(seizmeia|tests)/.+\.py$
+
+      - id: requirements-txt-fixer
+
+  # converts code to newer python syntax
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.31.0
+    hooks:
+      - id: pyupgrade
+        args: [--py310-plus]
+
+  # formats code
+  - repo: https://github.com/psf/black
+    rev: 22.1.0
+    hooks:
+      - id: black
+        args:
+          - --safe
+          - --quiet
+          - --line-length=79
+        files: ^((seizmeia|tests)/.+)?[^/]+\.py$
+
+  # manages imports
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.0
+    hooks:
+      - id: isort
+        args: [-a, "from __future__ import annotations"]
+
+  # check for any code spell mistakes
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.1.0
+    hooks:
+      - id: codespell
+        args:
+          - --ignore-words-list=seizmeia
+          - --skip="./.*,*.csv,*.json"
+          - --quiet-level=2
+        exclude_types: [csv, json]
+
+  # checks code formating
+  - repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - pycodestyle==2.8.0
+          - pyflakes==2.4.0
+          - pydocstyle==6.1.1
+          - flake8-comprehensions==3.7.0
+          - flake8-noqa==1.2.1
+          - mccabe==0.6.1
+        files: ^(seizmeia)/.+\.py$
+
+  # checks setup.cfg formating
+  - repo: https://github.com/asottile/setup-cfg-fmt
+    rev: v1.20.0
+    hooks:
+      - id: setup-cfg-fmt
+
+  # check for type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.931
+    hooks:
+    - id: mypy
+      additional_dependencies: [types-PyYAML>=6.0.4]

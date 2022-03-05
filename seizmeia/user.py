@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from enum import Enum
-from typing import TypedDict, List
+from typing import TypedDict
 
 from pydantic import BaseModel, EmailStr
 
@@ -8,7 +10,7 @@ class Options(TypedDict):
     """User options. Will be used to keep track privacy user configurations"""
 
     metrics_on: bool  # will not be keep track of user metrics
-    anonymous: bool  # real name will be hiden. used to audit any issues
+    anonymous: bool  # real name will be hidden. used to audit any issues
 
 
 class State(str, Enum):
@@ -28,6 +30,6 @@ class User(BaseModel):
     email: EmailStr
     name: str
     balance: float
-    archivements: List[str]
+    archivements: list[str]
     state: State
     options: Options

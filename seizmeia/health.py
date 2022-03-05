@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import asyncio
-from typing import Dict, Protocol
+from typing import Protocol
 
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse, Response
@@ -21,7 +23,7 @@ class HealthCheckService(Protocol):
     Any service with this interface can be a healthcheck service.
     """
 
-    healthers: Dict[str, Healther] = {}
+    healthers: dict[str, Healther] = {}
 
     def add(self, name: str, healther: Healther) -> None:
         if name in self.healthers.keys():
@@ -29,10 +31,10 @@ class HealthCheckService(Protocol):
 
         self.healthers[name] = healther
 
-    async def ready(self) -> Dict[str, str]:
+    async def ready(self) -> dict[str, str]:
         ...
 
-    async def live(self) -> Dict[str, str]:
+    async def live(self) -> dict[str, str]:
         ...
 
 
@@ -42,8 +44,8 @@ class ConcurrentHealthCheck(HealthCheckService):
     Requesting health status should be as slow as the slowest health provider.
     """
 
-    async def ready(self) -> Dict[str, str]:
-        not_ready: Dict[str, str] = {}
+    async def ready(self) -> dict[str, str]:
+        not_ready: dict[str, str] = {}
 
         status = await asyncio.gather(
             *[h.ready() for _, h in self.healthers.items()]
@@ -55,8 +57,8 @@ class ConcurrentHealthCheck(HealthCheckService):
 
         return not_ready
 
-    async def live(self) -> Dict[str, str]:
-        not_live: Dict[str, str] = {}
+    async def live(self) -> dict[str, str]:
+        not_live: dict[str, str] = {}
 
         status = await asyncio.gather(
             *[h.live() for _, h in self.healthers.items()]

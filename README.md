@@ -1,10 +1,16 @@
 <h1 align="center">Seizmeia</h1>
 
-<div align="center">  
+<div align="center">
 <p>A credit management tool for a beer tap</p>
 </div>
 
-## Run
+## Getting Started
+
+Clone the repository:
+
+```bash
+git clone https://github.com/seizmeia/seizmeia.git
+```
 
 To run the application:
 
@@ -18,7 +24,7 @@ To see it work:
 curl localhost:8000
 ```
 
-The application will autoreload on `/server/*` changes.
+The application will autoreload on `/seizmeia` changes.
 
 To stop the application:
 
