@@ -1,7 +1,8 @@
 all: run
 
-run:
-	@uvicorn seizmeia.server:app --reload
+run: run.local ## Runs the service locally
+run.local:
+	@python -m seizmeia
 
 bup: ## Start development environment services
 	@docker compose up --build --detach
@@ -14,8 +15,8 @@ logs:
 	@docker compose logs -f seizmeia
 
 format: ## Formats code
-	@isort seizmeia/**/*.py tests/**/*.py
-	@black seizmeia tests --line-length 79
+	@python -m isort .
+	@python -m black .
 
 test: typecheck unittest ## Tests code for typecheck and unit tests
 
@@ -23,10 +24,11 @@ typecheck: ## Type checks source code
 	@mypy seizmeia
 
 unittest: ## Runs unit tests
-	@pytest tests --asyncio-mode=strict
+	@pytest
 
 coverage: ## Gets code test coverage
-	@coverage run -m --source=seizmeia pytest tests 1> /dev/null
+	@coverage erase
+	@coverage run -m pytest 1> /dev/null
 	@coverage report
 
 ci:

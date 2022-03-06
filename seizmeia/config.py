@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 from pydantic import BaseModel
 from yaml import safe_load
 
-from seizmeia.server.auth.config import Config as AuthConfig
+from seizmeia.auth import Config as AuthConfig
 
 
 class Config(BaseModel):
@@ -20,6 +22,6 @@ def get_default_config() -> Config:
 def load_config_from_yaml(path: Path) -> Config:
     """Return configuration from yaml file"""
     config = get_default_config()
-    with open(path, "r") as reader:
+    with open(path) as reader:
         config = Config(**safe_load(reader))
     return config

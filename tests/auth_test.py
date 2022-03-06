@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 from datetime import timedelta
 from io import StringIO
+
 import yaml
 
-from seizmeia.server.auth.config import Config, EncryptionAlgorithm
+from seizmeia.auth import Config, EncryptionAlgorithm
 
 
 def test_config_from_yaml():

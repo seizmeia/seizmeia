@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import asyncio
 from datetime import timedelta
 
 
-class AsyncHealther:
+class AsyncHealtherMock:
     def __init__(
         self,
         sleep_time: timedelta,

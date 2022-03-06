@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import subprocess
 
 __version__ = "0.0.1"
