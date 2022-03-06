@@ -25,7 +25,7 @@ async def root() -> Response:
 
 def run() -> None:
     uvicorn.run(
-        "seizmeia.server:app",
+        "seizmeia.__main__:app",
         port=8000,
         host="0.0.0.0",
         loop="asyncio",

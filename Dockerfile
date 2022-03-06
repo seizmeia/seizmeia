@@ -13,4 +13,4 @@ FROM base AS production
 COPY . .
 
 EXPOSE 8000
-ENTRYPOINT [ "uvicorn", "seizmeia.server:app", "--host", "0.0.0.0" ]
+ENTRYPOINT [ "uvicorn", "seizmeia.__main__:app", "--host", "0.0.0.0" ]
