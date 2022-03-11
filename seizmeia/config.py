@@ -13,15 +13,15 @@ class Config(BaseModel):
 
     auth: AuthConfig
 
+    @classmethod
+    def get_default(cls) -> Config:
+        """Return the default server configuration"""
+        return cls(auth=AuthConfig())
 
-def get_default_config() -> Config:
-    """Return the default server configuration"""
-    return Config(auth=AuthConfig())
-
-
-def load_config_from_yaml(path: Path) -> Config:
-    """Return configuration from yaml file"""
-    config = get_default_config()
-    with open(path) as reader:
-        config = Config(**safe_load(reader))
-    return config
+    @classmethod
+    def from_yaml(cls, path: Path) -> Config:
+        """Return configuration from yaml file"""
+        config = cls.get_default()
+        with open(path) as reader:
+            config = cls(**safe_load(reader))
+        return config
