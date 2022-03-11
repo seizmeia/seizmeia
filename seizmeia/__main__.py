@@ -6,11 +6,11 @@ import uvicorn  # type: ignore
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, Response
 
-from seizmeia.config import load_config_from_yaml
+from seizmeia.config import Config
 from seizmeia.health import router as health_router
 from seizmeia.version import get_version
 
-config = load_config_from_yaml(Path("seizmeia.yml"))
+config = Config.from_yaml(Path("seizmeia.yml"))
 
 app = FastAPI()
 
