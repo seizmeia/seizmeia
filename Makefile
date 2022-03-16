@@ -34,6 +34,12 @@ coverage: ## Gets code test coverage
 ci:
 	@tox
 
+env:
+	@tox -e python3.10 --devenv .venv
+
+pre-commit:
+	@pre-commit run --all-files
+
 clear: clean ## Clears the repository
 clean:
 	@rm -rf **/__pycache__ .mypy_cache .pytest_cache .vscode .coverage *.egg-info .tox
