@@ -12,6 +12,24 @@ Clone the repository:
 git clone https://github.com/seizmeia/seizmeia.git
 ```
 
+### Setup environment
+
+Make sure you have `tox` installed in your system python and:
+
+```bash
+make env
+```
+
+### Run locally
+
+Run:
+
+```bash
+make run
+```
+
+### Run with Docker Compose
+
 To run the application:
 
 ```bash
