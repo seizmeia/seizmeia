@@ -1,5 +1,9 @@
 fastapi==0.73.0
+pydantic[email]==1.9.0
 passlib==1.7.4
 python-multipart==0.0.5
 PyYAML==5.4.1
 uvicorn~=0.17.4
+SQLAlchemy~=1.4.32
+passlib[bcrypt]~=1.7.4
+python-jose[cryptography]~=3.3.0

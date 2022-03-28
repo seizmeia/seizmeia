@@ -71,7 +71,7 @@ class ConcurrentHealthCheck(HealthCheckService):
         return not_live
 
 
-router = APIRouter()
+router = APIRouter(tags=["healthcheck"])
 healthcheck: HealthCheckService = ConcurrentHealthCheck()
 
 

@@ -3,19 +3,29 @@ from __future__ import annotations
 from pathlib import Path
 
 import uvicorn  # type: ignore
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse, Response
 
-from seizmeia.config import Config
+from seizmeia.db import Base, engine
 from seizmeia.health import router as health_router
+from seizmeia.settings import Settings
+from seizmeia.user.auth.token import router as token_router
+from seizmeia.user.routes import router as user_router
 from seizmeia.version import get_version
 
-config = Config.from_yaml(Path("seizmeia.yml"))
+config = Settings()
 
-app = FastAPI()
+app = FastAPI(
+    title="Seizmeia 🍺",
+    description="A credit management tool for a beer tap.",
+    version=get_version(),
+)
 
-# including healthcheck routes (/live and /ready)
+Base.metadata.create_all(bind=engine)
+
+app.include_router(user_router)
 app.include_router(health_router)
+app.include_router(token_router)
 
 
 @app.get("/")

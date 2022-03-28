@@ -5,7 +5,7 @@ from io import StringIO
 
 import yaml
 
-from seizmeia.auth import Config, EncryptionAlgorithm
+from seizmeia.auth.config import Config, EncryptionAlgorithm
 
 
 def test_config_from_yaml():
