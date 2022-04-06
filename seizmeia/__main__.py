@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 import uvicorn  # type: ignore
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.responses import JSONResponse, Response
 
 from seizmeia.db import Base, engine
 from seizmeia.health import router as health_router
 from seizmeia.settings import Settings
-from seizmeia.user.auth.token import router as token_router
 from seizmeia.user.routes import router as user_router
+from seizmeia.user.routes import token_router
 from seizmeia.version import get_version
 
 config = Settings()

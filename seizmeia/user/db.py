@@ -13,17 +13,23 @@ class Users(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
-    password = Column(String)
+    password = Column(String, index=True)
 
 
-def get_user(db: Session, user_id: int) -> schemas.User:
+def get_user(db: Session, user_id: int) -> schemas.User | None:
     user = db.query(Users).filter(Users.id == user_id).first()
+    if not user:
+        return None
+
     return schemas.User.from_orm(user)
 
 
-def get_user_by_username(db: Session, username: str) -> schemas.User:
+def get_user_by_username(db: Session, username: str) -> schemas.User | None:
     user = db.query(Users).filter(Users.username == username).first()
-    return user
+    if not user:
+        return None
+
+    return schemas.User.from_orm(user)
 
 
 def get_users(
@@ -43,6 +49,9 @@ def create_user(db: Session, user: schemas.UserCreate) -> schemas.User:
     return schemas.User.from_orm(db_user)
 
 
-def get_user_password(db: Session, username: str) -> str:
+def get_user_password(db: Session, username: str) -> str | None:
     user = db.query(Users).filter(Users.username == username).first()
+    if not user:
+        return None
+
     return user.password

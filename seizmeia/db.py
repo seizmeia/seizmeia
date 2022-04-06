@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 engine = create_engine(
-    "sqlite://", connect_args={"check_same_thread": False}, future=True
+    "sqlite:///dev.db", connect_args={"check_same_thread": False}, future=True
 )
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
