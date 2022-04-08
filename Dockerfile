@@ -15,7 +15,7 @@ COPY . .
 USER 1001:1001
 
 EXPOSE 80
-ENTRYPOINT [ "uvicorn", "seizmeia.__main__:app", "--host", "0.0.0.0", "--port", "80" ]
+ENTRYPOINT [ "python", "-m", "seizmeia" ]
 
 FROM base as devenv
 
@@ -25,7 +25,10 @@ RUN pip install --no-cache-dir -r requirements-dev.txt
 FROM devenv as dev
 
 COPY . .
-EXPOSE 56080
+
+ENV SEIZMEIA_ENVIRONMENT=development
+
+EXPOSE 80
 CMD [ "python", "-m", "seizmeia" ]
 
 FROM devenv as test
