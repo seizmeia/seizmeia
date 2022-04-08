@@ -20,5 +20,8 @@ def __get_git_description() -> str:
 if __name__ == "__main__":
     import sys
 
+    ascii_beer = ".~~~~.\n" "i====i_\n" "|cccc|_)\n" "|cccc|\n" "`-==-'\n"
+
+    # sys.stdout.write(ascii_beer)
     sys.stdout.write(get_version())
     sys.exit(0)

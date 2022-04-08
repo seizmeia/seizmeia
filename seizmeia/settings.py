@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from enum import Enum
+from ipaddress import IPv4Address
 from typing import Any
 
-from pydantic import BaseSettings
+import yaml
+from pydantic import BaseModel, BaseSettings, Field
 from pydantic.env_settings import SettingsSourceCallable
-from yaml import safe_load
 
 from seizmeia.user.config import Config as AuthConfig
 
@@ -13,15 +15,31 @@ def yaml_config_settings_source(settings: BaseSettings) -> dict[str, Any]:
     encoding = settings.__config__.env_file_encoding
 
     with open("seizmeia.yml", encoding=encoding) as reader:
-        config: dict[str, Any] = safe_load(reader)
+        config: dict[str, Any] = yaml.safe_load(reader)
 
     return config
+
+
+class EnvironmentSettings(str, Enum):
+    DEV = "development"
+    PROD = "production"
+
+    def is_dev(self) -> bool:
+        return self.value == "development"
+
+
+class UvicornSettings(BaseModel):
+    port: int = 80
+    host: IPv4Address = IPv4Address("0.0.0.0")
+    workers: int = 1
 
 
 class Settings(BaseSettings):
     """Defines the configuration of Seizmeia"""
 
-    auth: AuthConfig = AuthConfig()
+    environment: EnvironmentSettings = EnvironmentSettings.PROD
+    uvicorn: UvicornSettings = Field(default_factory=UvicornSettings)
+    auth: AuthConfig = Field(default_factory=AuthConfig)
 
     class Config:
         env_prefix = "seizmeia_"
@@ -39,3 +57,10 @@ class Settings(BaseSettings):
                 init_settings,
                 file_secret_settings,
             )
+
+
+if __name__ == "__main__":
+    import sys
+
+    sys.stdout.write(Settings().json())
+    sys.exit(0)
