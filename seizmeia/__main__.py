@@ -1,21 +1,30 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 import uvicorn  # type: ignore
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, Response
 
-from seizmeia.config import Config
+from seizmeia.db import Base, engine
 from seizmeia.health import router as health_router
+from seizmeia.settings import Settings
+from seizmeia.user.routes import router as user_router
+from seizmeia.user.routes import token_router
 from seizmeia.version import get_version
 
-config = Config.from_yaml(Path("seizmeia.yml"))
+config = Settings()
 
-app = FastAPI()
+app = FastAPI(
+    title="Seizmeia 🍺",
+    description="A credit management tool for a beer tap.",
+    version=get_version(),
+    debug=True,
+)
 
-# including healthcheck routes (/live and /ready)
+Base.metadata.create_all(bind=engine)
+
+app.include_router(user_router)
 app.include_router(health_router)
+app.include_router(token_router)
 
 
 @app.get("/")
@@ -26,11 +35,11 @@ async def root() -> Response:
 def run() -> None:
     uvicorn.run(
         "seizmeia.__main__:app",
-        port=8000,
-        host="0.0.0.0",
+        port=config.uvicorn.port,
+        host=str(config.uvicorn.host),
+        workers=config.uvicorn.workers,
+        reload=config.environment.is_dev(),
         loop="asyncio",
-        reload=True,
-        workers=1,
     )
 
 

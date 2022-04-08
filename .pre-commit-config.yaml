@@ -86,4 +86,8 @@ repos:
     rev: v0.931
     hooks:
     - id: mypy
-      additional_dependencies: [types-PyYAML>=6.0.4]
+      additional_dependencies: [
+        types-PyYAML>=6.0.4,
+        sqlalchemy~=1.4.35,
+        sqlalchemy2-stubs~=0.0.2a21
+      ]

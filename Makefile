@@ -42,7 +42,7 @@ pre-commit:
 
 clear: clean ## Clears the repository
 clean:
-	@rm -rf **/__pycache__ .mypy_cache .pytest_cache .vscode .coverage *.egg-info .tox
+	@rm -rf **/__pycache__ .mypy_cache .pytest_cache .vscode .coverage *.egg-info .tox .venv *.db
 
 help: ## Show this help
 	@printf "\033[32m\xE2\x9c\x93 usage: make [target]\n\033[0m"

@@ -12,5 +12,5 @@ class EncryptionAlgorithm(str, Enum):
 
 class Config(BaseModel):
     secretKey: str = ""
-    encrytionAlgorithm: EncryptionAlgorithm = EncryptionAlgorithm.HS256
+    encryptionAlgorithm: EncryptionAlgorithm = EncryptionAlgorithm.HS256
     tokenExpirationTime: timedelta = timedelta(days=30)
