@@ -3,6 +3,7 @@ from __future__ import annotations
 import uvicorn  # type: ignore
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, Response
+from fastapi.middleware.cors import CORSMiddleware
 
 from seizmeia.db import Base, engine
 from seizmeia.health import router as health_router
@@ -18,6 +19,19 @@ app = FastAPI(
     description="A credit management tool for a beer tap.",
     version=get_version(),
     debug=True,
+)
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 Base.metadata.create_all(bind=engine)
