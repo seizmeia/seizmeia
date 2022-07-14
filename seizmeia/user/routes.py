@@ -33,7 +33,7 @@ async def create_user(
     return create_user_w_hashed_password(session, user)
 
 
-@router.get("/users/me/", response_model=schemas.User)
+@router.get("/users/me", response_model=schemas.User)
 async def read_user_me(
     current_user: schemas.User = Security(get_current_user, scopes=["me"])
 ):
