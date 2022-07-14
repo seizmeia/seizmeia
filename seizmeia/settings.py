@@ -59,8 +59,15 @@ class Settings(BaseSettings):
             )
 
 
+config = Settings()
+
+
+def get_config() -> Settings:
+    return config
+
+
 if __name__ == "__main__":
     import sys
 
-    sys.stdout.write(Settings().json())
+    sys.stdout.write(get_config().json())
     sys.exit(0)

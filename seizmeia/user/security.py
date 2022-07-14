@@ -7,9 +7,10 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from seizmeia.db import get_db
+from seizmeia.token.encode import decode_access_token
+from seizmeia.token.schemas import TokenData
 from seizmeia.user import db, schemas
 from seizmeia.user.password import get_password_hash, verify_password
-from seizmeia.user.token import TokenData, decode_access_token
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="token", scopes={"me": "Read information about the current user."}

@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import Session
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
 
 from seizmeia.db import Base
 from seizmeia.user import schemas
 
 
-class Users(Base):
+class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -17,7 +21,7 @@ class Users(Base):
 
 
 def get_user(db: Session, user_id: int) -> schemas.User | None:
-    user = db.query(Users).filter(Users.id == user_id).first()
+    user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return None
 
@@ -25,7 +29,7 @@ def get_user(db: Session, user_id: int) -> schemas.User | None:
 
 
 def get_user_by_username(db: Session, username: str) -> schemas.User | None:
-    user = db.query(Users).filter(Users.username == username).first()
+    user = db.query(User).filter(User.username == username).first()
     if not user:
         return None
 
@@ -35,12 +39,12 @@ def get_user_by_username(db: Session, username: str) -> schemas.User | None:
 def get_users(
     db: Session, skip: int = 0, limit: int = 100
 ) -> list[schemas.User]:
-    users = db.query(Users).offset(skip).limit(limit).all()
+    users = db.query(User).offset(skip).limit(limit).all()
     return [schemas.User.from_orm(user) for user in users]
 
 
 def create_user(db: Session, user: schemas.UserCreate) -> schemas.User:
-    db_user = Users(
+    db_user = User(
         username=user.username, email=user.email, password=user.password
     )
     db.add(db_user)
@@ -50,7 +54,7 @@ def create_user(db: Session, user: schemas.UserCreate) -> schemas.User:
 
 
 def get_user_password(db: Session, username: str) -> str | None:
-    user = db.query(Users).filter(Users.username == username).first()
+    user = db.query(User).filter(User.username == username).first()
     if not user:
         return None
 

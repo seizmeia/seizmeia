@@ -3,21 +3,8 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from jose import jwt  # type: ignore
-from pydantic import BaseModel
 
-from seizmeia.settings import Settings
-
-token_cfg = Settings().auth
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: str
-    scopes: list[str] = []
+from seizmeia.settings import get_config
 
 
 def create_access_token(
@@ -29,6 +16,9 @@ def create_access_token(
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
+
+    token_cfg = get_config().auth
+
     encoded_jwt = jwt.encode(
         to_encode,
         token_cfg.secretKey,
@@ -38,6 +28,8 @@ def create_access_token(
 
 
 def decode_access_token(token: str) -> dict:
+    token_cfg = get_config().auth
+
     return jwt.decode(
         token=token,
         key=token_cfg.secretKey,
