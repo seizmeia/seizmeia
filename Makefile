@@ -40,12 +40,6 @@ env:
 pre-commit:
 	@pre-commit run --all-files
 
-.PHONY: web web.dev
-web:
-	npm --prefix web run build
-web.dev:
-	npm --prefix web run dev
-
 clear: clean ## Clears the repository
 clean:
 	@rm -rf **/__pycache__ .mypy_cache .pytest_cache .vscode .coverage *.egg-info .tox .venv *.db
