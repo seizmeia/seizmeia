@@ -39,7 +39,7 @@ make bup
 To see it work:
 
 ```bash
-curl localhost:8000
+curl localhost/api
 ```
 
 The application will autoreload on `/seizmeia` changes.
