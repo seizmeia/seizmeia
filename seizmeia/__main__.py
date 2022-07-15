@@ -1,5 +1,4 @@
 from __future__ import annotations
-from sys import prefix
 
 import uvicorn  # type: ignore
 from fastapi import FastAPI
@@ -10,7 +9,8 @@ from seizmeia.health import router as health_router
 from seizmeia.settings import Settings
 from seizmeia.token.route import router as token_router
 from seizmeia.user.routes import router as user_router
-from seizmeia.version import router as version_router, get_version
+from seizmeia.version import get_version
+from seizmeia.version import router as version_router
 
 config = Settings()
 
@@ -21,10 +21,7 @@ app = FastAPI(
     debug=True,
 )
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000"
-]
+origins = ["http://localhost", "http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,

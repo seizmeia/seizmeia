@@ -9,5 +9,6 @@ include = '\.pyi?$'
 
 [tool.isort]
 profile = "black"
+line_length = 79
 src_paths = ["seizmeia", "tests"]
 add_imports = ["from __future__ import annotations"]
