@@ -1,8 +1,8 @@
 from __future__ import annotations
+from sys import prefix
 
 import uvicorn  # type: ignore
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from seizmeia.db import Base, engine
@@ -10,7 +10,7 @@ from seizmeia.health import router as health_router
 from seizmeia.settings import Settings
 from seizmeia.token.route import router as token_router
 from seizmeia.user.routes import router as user_router
-from seizmeia.version import get_version
+from seizmeia.version import router as version_router, get_version
 
 config = Settings()
 
@@ -36,14 +36,10 @@ app.add_middleware(
 
 Base.metadata.create_all(bind=engine)
 
-app.include_router(user_router)
+app.include_router(user_router, prefix="/api")
 app.include_router(health_router)
 app.include_router(token_router)
-
-
-@app.get("/")
-async def root() -> Response:
-    return JSONResponse({"version": get_version()})
+app.include_router(version_router, prefix="/api")
 
 
 def run() -> None:

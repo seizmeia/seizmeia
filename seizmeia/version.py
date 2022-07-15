@@ -1,10 +1,22 @@
 from __future__ import annotations
 
 import subprocess
+from functools import lru_cache
+
+from fastapi import APIRouter
+from fastapi.responses import Response, JSONResponse
 
 __version__ = "0.0.1"
 
+router = APIRouter()
 
+@router.get("/version")
+async def get_version_handler() -> Response:
+    return JSONResponse({
+        "version": get_version()
+    })
+
+@lru_cache(maxsize=1)
 def get_version() -> str:
     return f"{__version__}-{__get_git_description()}"
 

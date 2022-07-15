@@ -6,10 +6,10 @@ repos:
       - id: check-json
         exclude: (.vscode|.devcontainer)
 
-      - id: no-commit-to-branch
-        args:
-          - --branch=dev
-          - --branch=master
+      # - id: no-commit-to-branch
+      #   args:
+      #     - --branch=dev
+      #     - --branch=master
 
       - id: trailing-whitespace
         files: ^(seizmeia|tests)/.+\.py$
